@@ -24,7 +24,10 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "lib/oxmlk.rb",
+     "lib/oxmlk/description.rb",
+     "oxmlk.gemspec",
      "spec/oxmlk_spec.rb",
+     "spec/spec.opts",
      "spec/spec_helper.rb"
   ]
   s.homepage = %q{http://github.com/hexorx/oxmlk}

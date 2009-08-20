@@ -4,18 +4,19 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "oxmlk"
+    gem.name = 'oxmlk'
     gem.summary = %Q{Object 2 XML kit for ruby}
     gem.description = %Q{OxMlk gives you a simple way to map you ruby objects to XML and then convert one to the other.}
-    gem.email = "hexorx@gmail.com"
-    gem.homepage = "http://github.com/hexorx/oxmlk"
-    gem.authors = ["Josh Robinson"]
-    gem.add_development_dependency "rspec"
+    gem.email = 'hexorx@gmail.com'
+    gem.homepage = 'http://github.com/hexorx/oxmlk'
+    gem.authors = ['Josh Robinson']
+    gem.add_development_dependency 'rspec'
+    gem.add_dependency 'libxml-ruby'
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
+  puts 'Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler'
 end
 
 require 'spec/rake/spectask'
