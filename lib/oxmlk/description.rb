@@ -14,7 +14,7 @@ module OxMlk
       @from = o.delete(:from)
       @as = o.delete(:as) || :content
       @name = name.to_s
-      
+
       @processors = [coputed_processor, block].compact
       @is_attribute = computed_is_attribute
       @xpath = computed_xpath
@@ -44,22 +44,23 @@ module OxMlk
       @as.is_a?(Array)
     end
     
-    def process(node)
+    def process(node,instance)
       @processors.inject(node) do |memo,processor|
         case processor
         when Proc
           processor.call(memo)
         when Symbol
+          instance.send(processor,memo)
         else
           processor.from_xml(memo) rescue nil
         end
       end
     end
     
-    def from_xml
+    def from_xml(xml,instance)
       nodes = ['1','2','3'] # get the value
         
-      nodes.map! {|n| process(n)}
+      nodes.map! {|n| process(n,instance)}
       collection? ? nodes : nodes.first
     end
     

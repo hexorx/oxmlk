@@ -1,4 +1,5 @@
 dir = File.dirname(__FILE__)
+require File.join(dir, 'oxmlk/xml')
 require File.join(dir, 'oxmlk/description')
 
 module OxMlk
@@ -16,7 +17,8 @@ module OxMlk
   module ClassMethods
     
     def ox_attrs
-      @ox_attrs ||= []
+      @@ox_attrs ||= {}
+      @@ox_attrs[to_s] ||= []
     end
     
     def ox_attr(name,o={})
@@ -25,7 +27,9 @@ module OxMlk
       attr new_attr.method_name, new_attr.writable?
     end
     
-    def from_xml(xml)
+    def from_xml(data, *args)
+      xml = XML::Node.from(data)
+      
       new
     end
     

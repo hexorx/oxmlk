@@ -1,0 +1,5 @@
+<Response>
+  <Say loop="2">More Cowbell!!!</Say>
+  <Play>http://teliax.com/cowbell.mp3</Play>
+  <Say loop="4">Developers!</Say>
+</Response>
