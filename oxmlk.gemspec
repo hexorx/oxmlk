@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{oxmlk}
-  s.version = "0.0.0"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Josh Robinson"]
-  s.date = %q{2009-08-20}
+  s.date = %q{2009-08-24}
   s.description = %q{OxMlk gives you a simple way to map you ruby objects to XML and then convert one to the other.}
   s.email = %q{hexorx@gmail.com}
   s.extra_rdoc_files = [
@@ -23,12 +23,19 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
+     "examples/example.rb",
+     "examples/posts.rb",
+     "examples/xml/example.xml",
+     "examples/xml/posts.xml",
      "lib/oxmlk.rb",
      "lib/oxmlk/description.rb",
+     "lib/oxmlk/xml.rb",
      "oxmlk.gemspec",
+     "spec/description_spec.rb",
      "spec/oxmlk_spec.rb",
      "spec/spec.opts",
-     "spec/spec_helper.rb"
+     "spec/spec_helper.rb",
+     "spec/xml_spec.rb"
   ]
   s.homepage = %q{http://github.com/hexorx/oxmlk}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -36,8 +43,12 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.3}
   s.summary = %q{Object 2 XML kit for ruby}
   s.test_files = [
-    "spec/oxmlk_spec.rb",
-     "spec/spec_helper.rb"
+    "spec/description_spec.rb",
+     "spec/oxmlk_spec.rb",
+     "spec/spec_helper.rb",
+     "spec/xml_spec.rb",
+     "examples/example.rb",
+     "examples/posts.rb"
   ]
 
   if s.respond_to? :specification_version then
@@ -46,10 +57,16 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rspec>, [">= 0"])
+      s.add_runtime_dependency(%q<libxml-ruby>, [">= 0"])
+      s.add_runtime_dependency(%q<activesupport>, [">= 2.1.0"])
     else
       s.add_dependency(%q<rspec>, [">= 0"])
+      s.add_dependency(%q<libxml-ruby>, [">= 0"])
+      s.add_dependency(%q<activesupport>, [">= 2.1.0"])
     end
   else
     s.add_dependency(%q<rspec>, [">= 0"])
+    s.add_dependency(%q<libxml-ruby>, [">= 0"])
+    s.add_dependency(%q<activesupport>, [">= 2.1.0"])
   end
 end
