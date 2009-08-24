@@ -1,5 +1,14 @@
-<Response>
-  <Say loop="2">More Cowbell!!!</Say>
-  <Play>http://teliax.com/cowbell.mp3</Play>
-  <Say loop="4">Developers!</Say>
-</Response>
+<person category="meat_popsicle">
+  <name>Joe</name>
+  <number group="main">3035551212</number>
+  <number group="cell">3035551234</number>
+  <email group="home">test@example.com</email>
+  <friends>
+    <person>
+      <name>Bob</name>
+    </person>
+    <person>
+      <name>John</name>
+    </person>
+  </friends>
+</person>

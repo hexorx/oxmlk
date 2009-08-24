@@ -4,7 +4,7 @@ describe OxMlk do
   
   before(:all) do
     require example(:example)
-    @klass = Example
+    @klass = Person
   end
   
   describe 'being included into another class' do
@@ -27,6 +27,10 @@ describe OxMlk do
     it 'should add an ox_elems method' do
       @klass.should respond_to(:ox_elems)
     end
+    
+    it 'should add a tag_name method' do
+      @klass.should respond_to(:ox_tag)
+    end
   end
   
   describe '#ox_attr' do
@@ -43,39 +47,50 @@ describe OxMlk do
     end
 
     it 'should add a writter method when :freeze => false' do
-      @klass.new.should respond_to(:warm=)
+      @klass.new.should respond_to(:numbers=)
     end
   
     it 'should not add a writter method when :freeze => true' do
-      @klass.new.should_not respond_to(:cold=)
+      @klass.new.should_not respond_to(:contacts=)
     end
   end
     
   describe '#from_xml' do
     
     it 'should return an instance of class' do
-      @klass.from_xml('<Response/>').should be_a(@klass)
+      @klass.from_xml('<person/>').should be_a(@klass)
+    end
+    
+    it 'should error on mismatched tag' do
+      proc { @klass.from_xml('<Person/>') }.should raise_error
     end
     
     describe 'example' do
-      describe 'posts' do
-        
-        before(:all) do
-          
-          @xml = File.new(xml_for(:posts))
-          @example = Example.from_xml(@xml)
-        end
-        
-        it 'should fetch user' do
-          Example.ox_attrs.size
-        end
+      before(:all) do
+        @xml = xml_for(:example)
+        @example = Person.from_xml(@xml)
+      end
+      
+      it 'should fetch name' do
+        @example.name.should == 'Joe'
+      end
+      
+      it 'should fetch category' do
+        @example.category.should == 'meat_popsicle'
+      end
+      
+      it 'should fetch numbers' do
+        @example.numbers.map(&:value).should == ['3035551212','3035551234']
+      end
+      
+      it 'should fetch contacts' do
+        @example.contacts.map(&:value).should == ['3035551212','3035551234','test@example.com']
       end
     end
   end
   
   describe '#ox_attributes' do
     it 'should return a list of attributes' do
-      p @klass.ox_attributes
       @klass.ox_attributes.size.should == 2
     end
   end
