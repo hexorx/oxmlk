@@ -6,11 +6,19 @@ require 'activesupport'
 module OxMlk
   
   def self.included(base)
-    base.extend ClassMethods
+    base.class_eval do
+      include InstanceMethods
+      extend ClassMethods
+    end
+  end
+  
+  module InstanceMethods
+    def to_xml
+      self.class.to_xml(self)
+    end
   end
   
   module ClassMethods
-    
     def ox_attrs
       @ox_attrs ||= []
     end
@@ -21,9 +29,26 @@ module OxMlk
       attr new_attr.accessor, new_attr.writable?
     end
     
+    def ox_attributes
+      ox_attrs.select {|x| x.attribute?}
+    end
+    
+    def ox_elems
+      ox_attrs.select {|x| x.elem?}
+    end
+    
+    def ox_tag(tag=false)
+      @ox_tag ||= (tag || self).to_s
+    end
+    
+    def xml_array(data)
+      [ ox_tag, 
+        ox_elems.map {|x| x.to_xml(data)}.flatten,
+        ox_attributes.map {|x| x.to_xml(data)} ]
+    end
+    
     def from_xml(data)
       xml = XML::Node.from(data)
-      p [xml.name, ox_tag]
       raise 'invalid XML' unless xml.name == ox_tag
       
       ox = new
@@ -38,16 +63,8 @@ module OxMlk
       ox
     end
     
-    def ox_attributes
-      ox_attrs.select {|x| x.attribute?}
-    end
-    
-    def ox_elems
-      ox_attrs.select {|x| x.elem?}
-    end
-    
-    def ox_tag(tag=false)
-      @ox_tag ||= (tag || self).to_s
+    def to_xml(data)
+      XML::Node.build(*xml_array(data))
     end
     
   end

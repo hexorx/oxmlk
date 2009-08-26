@@ -36,5 +36,29 @@ describe OxMlk::XML::Node, '#from' do
     data = File.open(@xml).read
     OxMlk::XML::Node.from(data).should be_a(OxMlk::XML::Node)
   end
+end
+
+describe OxMlk::XML::Node, '#build' do
+  before(:all) do
+    @node = OxMlk::XML::Node
+    @nodes = [@node.new('one'),@node.new('two'),@node.new('three')]
+    @attributes = [[1,2],[3,4]]
+    @args = ['name',@nodes,@attributes]
+  end
   
+  it 'should return a new node' do
+    @node.build(*@args).should be_a(@node)
+  end
+  
+  it 'should set its name to the first argument' do
+    @node.build(*@args).name.should == 'name'
+  end
+  
+  it 'should set its children to second argument' do
+    @node.build(*@args).children.should == @nodes
+  end
+  
+  it 'should set its attributes to the third argument' do
+    @node.build(*@args).should be_attributes
+  end
 end

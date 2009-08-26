@@ -18,7 +18,8 @@ module OxMlk
       @froze = o.delete(:freeze)
       @from = o.delete(:from)
       @as = o.delete(:as)
-      @wrapper = o.delete(:wrapper)
+      @in = o.delete(:in)
+      @tag = o.delete(:tag)
       @name = name.to_s
       
       @is_attribute = computed_is_attribute
@@ -62,6 +63,10 @@ module OxMlk
       @as.is_a?(Array)
     end
     
+    def content?
+      @from == :content || @from == '.'
+    end
+    
     def ox_object?
       return false if [*@as].empty?
       [*@as].all? {|x| x.respond_to?(:from_xml)}
@@ -86,6 +91,24 @@ module OxMlk
       return nil if nodes.first.nil?
       return process(nodes.first,instance) unless collection?
       (nodes).map {|n| process(n,instance)}
+    end
+    
+    def to_xml(data)
+      value = data.send(accessor)
+      
+      return [] if value.nil?
+      return [accessor.to_s,value.to_s] if attribute?
+      
+      nodes = [*value].map do |node|
+        if node.respond_to?(:to_xml)
+          node.to_xml
+        elsif content?
+          XML::Node.new_text(node.to_s)
+        else
+          XML::Node.new(accessor, node.to_s)
+        end
+      end
+      @in ? XML::Node.build(@in, nodes) : nodes
     end
     
   protected
@@ -120,7 +143,7 @@ module OxMlk
     end
     
     def wrap(xpath=nil)
-      [@wrapper,xpath].compact.join('/')
+      [@in,xpath].compact.join('/')
     end
   end
 end

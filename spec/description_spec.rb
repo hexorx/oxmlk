@@ -9,7 +9,7 @@ describe OxMlk::Description do
     @klass = Person
   end
   
-  describe 'xpath' do
+  describe '#xpath' do
     it 'should be name by default' do
       @desc = OxMlk::Description.new(:name)
       @desc.xpath.should == 'name'
@@ -45,34 +45,34 @@ describe OxMlk::Description do
       @desc.xpath.should == 'number|person'
     end
     
-    it 'should add wrapper + / to xpath if wrapper is passed' do
-      @desc = OxMlk::Description.new(:person, :wrapper => :friends)
+    it 'should add in + / to xpath if :in is passed' do
+      @desc = OxMlk::Description.new(:person, :in => :friends)
       @desc.xpath.should == 'friends/person'
     end
   end
   
-  describe 'accessor' do
+  describe '#accessor' do
     it 'should be attr name as Symbol' do
       @desc = OxMlk::Description.new(:name)
       @desc.accessor.should == :name
     end
   end
   
-  describe 'setter' do
+  describe '#setter' do
     it 'should be accessor with = on the end' do
       @desc = OxMlk::Description.new(:name)
       @desc.setter.should == :'name='
     end
   end
   
-  describe 'instance_variable' do
+  describe '#instance_variable' do
     it 'should be accessor with @ on the front' do
       @desc = OxMlk::Description.new(:name)
       @desc.instance_variable.should == :'@name'
     end
   end
   
-  describe 'writable?' do
+  describe '#writable?' do
     it 'should be true by default' do
       @desc = OxMlk::Description.new(:name)
       @desc.writable?.should be_true
@@ -89,7 +89,7 @@ describe OxMlk::Description do
     end
   end
   
-  describe 'attribute?' do
+  describe '#attribute?' do
     it 'should be true if :from starts with @' do
       @desc = OxMlk::Description.new(:name, :from => '@name')
       @desc.attribute?.should be_true
@@ -101,7 +101,7 @@ describe OxMlk::Description do
     end
   end
   
-  describe 'elem?' do
+  describe '#elem?' do
     it 'should be true if attribute? is false' do
       @desc = OxMlk::Description.new(:name)
       @desc.elem?.should be_true
@@ -113,7 +113,7 @@ describe OxMlk::Description do
     end
   end
   
-  describe 'ox_type' do
+  describe '#ox_type' do
     it 'should be :elem if elem? is true' do
       @desc = OxMlk::Description.new(:name)
       @desc.ox_type.should == :elem
@@ -125,7 +125,7 @@ describe OxMlk::Description do
     end
   end
   
-  describe 'collection?' do
+  describe '#collection?' do
     it 'should be true if :as is an Array' do
       @desc = OxMlk::Description.new(:name, :as => [])
       @desc.collection?.should be_true
@@ -137,7 +137,7 @@ describe OxMlk::Description do
     end
   end
   
-  describe 'ox_object?' do
+  describe '#ox_object?' do
     it 'should be true if :as responds to from_xml' do
       @desc = OxMlk::Description.new(:number, :as => Person)
       @desc.ox_object?.should be_true
@@ -159,7 +159,29 @@ describe OxMlk::Description do
     end
   end
   
-  describe 'from_xml' do
+  describe '#content?' do
+    it 'should return true if :from is :content' do
+      @desc = OxMlk::Description.new(:number, :from => :content)
+      @desc.content?.should be_true
+    end
+    
+    it 'should return true if :from is "."' do
+      @desc = OxMlk::Description.new(:number, :from => '.')
+      @desc.content?.should be_true
+    end
+    
+    it 'should return false if :from is nil' do
+      @desc = OxMlk::Description.new(:number)
+      @desc.content?.should be_false
+    end
+    
+    it 'should return false if :from is string other than "."' do
+      @desc = OxMlk::Description.new(:number, :from => 'hi')
+      @desc.content?.should be_false
+    end
+  end
+  
+  describe '#from_xml' do
     
     it 'should accept xml argument' do
       @desc = OxMlk::Description.new(:name)
@@ -216,6 +238,24 @@ describe OxMlk::Description do
     it 'should match class to ox_tag if array of ox_objects is passed to :as' do
       @desc = OxMlk::Description.new(:contact, :as => [Number,Email])
       @desc.from_xml(@xml, @klass.new).first.should be_a(Number)
+    end
+  end
+  
+  describe '#to_xml' do
+    before(:all) do
+      @ox = Person.from_xml(@xml)
+      @attr = Person.ox_attributes.first
+      @elem = Person.ox_elems.first
+    end
+    
+    it 'should return an Array of Strings if it is an attribute' do
+      @attr.to_xml(@ox).should be_a(Array)
+      @attr.to_xml(@ox).first.should be_a(String)
+    end
+    
+    it 'should return an Array of nodes if it is an elem' do
+      @elem.to_xml(@ox).should be_a(Array)
+      @elem.to_xml(@ox).first.should be_a(OxMlk::XML::Node)
     end
   end
 end

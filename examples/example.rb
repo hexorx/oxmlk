@@ -3,6 +3,7 @@ class Number
   
   ox_tag :number
   
+  ox_attr :group, :from => :attr
   ox_attr(:value, :from => :content)
 end
 
@@ -11,6 +12,7 @@ class Email
   
   ox_tag :email
   
+  ox_attr :group, :from => :attr
   ox_attr(:value, :from => :content)
 end
 
@@ -20,11 +22,11 @@ class Person
   ox_tag :person
   
   ox_attr(:category, :from => :attr)
-  ox_attr(:two_attr, :from => '@attr2')
+  ox_attr(:alt, :from => '@alt')
   
   ox_attr(:name)
-  ox_attr(:numbers, :as => [Number], :freeze => false)
   ox_attr(:contacts, :as => [Number,Email], :freeze => true)
+  ox_attr(:friends, :as => [Person], :in => :friends, :freeze => false)
   
   def say_hello(xml)
     'hello'
