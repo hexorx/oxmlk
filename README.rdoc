@@ -1,6 +1,6 @@
 = oxmlk
 
-Description goes here.
+OxMlk is a simple lightweight XML mapper. Its structure is inspired by happymapper and its syntax takes after ROXML. Right now there is one example to get things going. More features, examples and documentation will be coming soon.
 
 == Note on Patches/Pull Requests
  
