@@ -62,3 +62,13 @@ describe OxMlk::XML::Node, '#build' do
     @node.build(*@args).should be_attributes
   end
 end
+
+describe OxMlk::XML::Node, '#value' do
+  before(:all) do
+    @node = OxMlk::XML::Node.new('test')
+  end
+  
+  it 'should be the same as content' do
+    @node.value.should == @node.content
+  end
+end

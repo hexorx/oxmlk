@@ -2,14 +2,9 @@ module OxMlk
 
   class Description
     PROCESSORS = {
-      :elem => {
-        :value => proc {|x| x.content rescue nil},
-        Integer => proc {|x| x.content.to_i rescue nil},
-        Float => proc {|x| x.content.to_f rescue nil}
-      },
-      :attribute => {
-        :value => proc {|x| x.value rescue nil} 
-      }
+      :value => proc {|x| x.value rescue nil},
+      Integer => proc {|x| x.value.to_i rescue nil},
+      Float => proc {|x| x.value.to_f rescue nil}
     }
     
     attr_reader :xpath
@@ -139,7 +134,7 @@ module OxMlk
     def coputed_processor
       return proc {|x| Hash[*@as.map{|o| [o.ox_tag,o]}.flatten][x.name].from_xml(x) } if collection? && ox_object?
       processor = [*@as].first || :value
-      PROCESSORS[ox_type][processor] || processor
+      PROCESSORS[processor] || processor
     end
     
     def wrap(xpath=nil)

@@ -10,6 +10,8 @@ module OxMlk
     Error = LibXML::XML::Error
     
     class Node
+      alias_method :value, :content
+      
       def self.from(data)
         case data
         when XML::Document
