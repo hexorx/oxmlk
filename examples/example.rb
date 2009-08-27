@@ -32,3 +32,13 @@ class Person
     'hello'
   end
 end
+
+class Example
+  include OxMlk
+end
+
+module Test
+  class Example
+    include OxMlk
+  end
+end

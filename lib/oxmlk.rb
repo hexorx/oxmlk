@@ -38,7 +38,7 @@ module OxMlk
     end
     
     def ox_tag(tag=false)
-      @ox_tag ||= (tag || self).to_s
+      @ox_tag ||= (tag || self).to_s.split('::').last
     end
     
     def xml_array(data)

@@ -116,5 +116,15 @@ describe OxMlk::ClassMethods do
       @klass.ox_elems.size.should == 3
     end
   end
+  
+  describe '#ox_tag' do
+    it 'should default to class name' do
+      Example.ox_tag.should == 'Example'
+    end
+    
+    it 'should default to class name with module removed' do
+      Test::Example.ox_tag.should == 'Example'
+    end
+  end
 end
 
