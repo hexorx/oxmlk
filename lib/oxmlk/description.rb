@@ -138,7 +138,7 @@ module OxMlk
     end
     
     def wrap(xpath=nil)
-      [@in,xpath].compact.join('/')
+      (xpath.split('|').map {|x| [@in,x].compact.join('/') }).join('|') 
     end
   end
 end

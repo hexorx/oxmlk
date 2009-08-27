@@ -45,9 +45,14 @@ describe OxMlk::Description do
       @desc.xpath.should == 'number|person'
     end
     
-    it 'should add in + / to xpath if :in is passed' do
+    it 'should add :in + / to xpath if :in is passed' do
       @desc = OxMlk::Description.new(:person, :in => :friends)
       @desc.xpath.should == 'friends/person'
+    end
+    
+    it 'should add :in + / to all items in array of ox_objetcs' do
+      @desc = OxMlk::Description.new(:digits, :as => [Number,Person], :in => :friends)
+      @desc.xpath.should == 'friends/number|friends/person'
     end
   end
   
