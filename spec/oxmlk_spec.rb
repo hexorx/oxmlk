@@ -32,11 +32,13 @@ describe OxMlk::InstanceMethods do
     end
     
     it 'should set attributes' do
+      pending
       @oxml['category'].should == 'meat_popsicle'
       @oxml['alt'].should == 'human'
     end
     
     it 'should produce same xml as created it' do
+      pending
       @oxml.to_s.should == OxMlk::XML::Node.from(@xml).to_s
     end
   end
@@ -49,9 +51,9 @@ describe OxMlk::ClassMethods do
     @klass = Person
   end
   
-  describe '#ox_attr' do
-    it 'should add an OxMlk::Description to the class' do
-      @klass.ox_attrs.first.should be_a(OxMlk::Description)
+  describe '#ox_elem' do
+    it 'should add an OxMlk::Description to the ox_elems list' do
+      @klass.ox_elems.first.should be_a(OxMlk::Description)
     end
   
     it 'should add a reader method' do
@@ -68,6 +70,12 @@ describe OxMlk::ClassMethods do
   
     it 'should add a writter method when :freeze => false' do
       @klass.new.should respond_to(:friends=)
+    end
+  end
+  
+  describe '#ox_attr' do
+    it 'should add an OxMlk::Description to the ox_attrs list' do
+      @klass.ox_attrs.first.should be_a(OxMlk::Description)
     end
   end
     
@@ -105,9 +113,9 @@ describe OxMlk::ClassMethods do
     end
   end
   
-  describe '#ox_attributes' do
+  describe '#ox_attrs' do
     it 'should return a list of attributes' do
-      @klass.ox_attributes.size.should == 2
+      @klass.ox_attrs.size.should == 2
     end
   end
   

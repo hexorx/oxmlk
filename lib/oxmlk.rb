@@ -1,7 +1,10 @@
 dir = File.dirname(__FILE__)
-require File.join(dir, 'oxmlk/xml')
-require File.join(dir, 'oxmlk/description')
+
 require 'activesupport'
+
+require File.join(dir, 'oxmlk/xml')
+require File.join(dir, 'oxmlk/attr')
+require File.join(dir, 'oxmlk/description')
 
 module OxMlk
   
@@ -9,6 +12,8 @@ module OxMlk
     base.class_eval do
       include InstanceMethods
       extend ClassMethods
+      
+      @ox_attrs, @ox_elems = [], []
     end
   end
   
@@ -19,22 +24,18 @@ module OxMlk
   end
   
   module ClassMethods
-    def ox_attrs
-      @ox_attrs ||= []
-    end
+    attr_accessor :ox_attrs, :ox_elems
     
     def ox_attr(name,o={})
-      new_attr =  Description.new(name, o)
-      ox_attrs << new_attr
-      attr new_attr.accessor, new_attr.writable?
+      new_attr =  Attr.new(name, o)
+      (@ox_attrs ||= []) << new_attr
+      attr_accessor new_attr.accessor
     end
     
-    def ox_attributes
-      ox_attrs.select {|x| x.attribute?}
-    end
-    
-    def ox_elems
-      ox_attrs.select {|x| x.elem?}
+    def ox_elem(name,o={})
+      new_elem =  Description.new(name, o)
+      (@ox_elems ||= []) << new_elem
+      attr_accessor new_elem.accessor
     end
     
     def ox_tag(tag=false)
@@ -44,7 +45,7 @@ module OxMlk
     def xml_array(data)
       [ ox_tag, 
         ox_elems.map {|x| x.to_xml(data)}.flatten,
-        ox_attributes.map {|x| x.to_xml(data)} ]
+        ox_attrs.map {|x| x.to_xml(data)} ]
     end
     
     def from_xml(data)
@@ -52,12 +53,13 @@ module OxMlk
       raise 'invalid XML' unless xml.name == ox_tag
       
       ox = new
-      ox_attrs.each do |a|
-        value = a.from_xml(xml,ox)
-        if ox.respond_to?(a.setter)
-          ox.send(a.setter,value)
+      
+      (ox_attrs + ox_elems).each do |e|
+        value = e.from_xml(xml)
+        if ox.respond_to?(e.setter)
+          ox.send(e.setter,value)
         else
-          ox.instance_variable_set(a.instance_variable,value)
+          ox.instance_variable_set(e.instance_variable,value)
         end
       end
       ox

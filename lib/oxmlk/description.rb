@@ -67,25 +67,23 @@ module OxMlk
       [*@as].all? {|x| x.respond_to?(:from_xml)}
     end
     
-    def process(node,instance)
+    def process(node)
       @processors.inject(node) do |memo,processor|
         case processor
         when Proc
           processor.call(memo)
-        when Symbol
-          instance.send(processor,memo)
         else
           processor.from_xml(memo)
         end
       end
     end
     
-    def from_xml(data,instance)
+    def from_xml(data)
       xml = XML::Node.from(data)
       nodes = xml.find(@xpath)
       return nil if nodes.first.nil?
-      return process(nodes.first,instance) unless collection?
-      (nodes).map {|n| process(n,instance)}
+      return process(nodes.first) unless collection?
+      (nodes).map {|n| process(n)}
     end
     
     def to_xml(data)
