@@ -25,8 +25,8 @@ class Person
   ox_attr :alternate, :from => 'alt'
   
   ox_elem :name
-  ox_elem :contacts, :as => [Number,Email], :freeze => true
-  ox_elem :friends, :as => [Person], :in => :friends, :freeze => false
+  ox_elem :contacts, :as => [Number,Email]
+  ox_elem :friends, :as => [Person], :in => :friends
   
   def say_hello(xml)
     'hello'

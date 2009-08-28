@@ -24,10 +24,6 @@ module OxMlk
       procs.inject(XML::Node.from(data)[tag]) {|d,p| p.call(d) rescue d}
     end
     
-    def to_xml
-      [tag]
-    end
-    
     def self.fetch_bool(value)
       value = value.to_s.downcase
       return true if %w{true yes 1 t}.include? value

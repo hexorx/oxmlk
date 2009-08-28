@@ -32,13 +32,11 @@ describe OxMlk::InstanceMethods do
     end
     
     it 'should set attributes' do
-      pending
       @oxml['category'].should == 'meat_popsicle'
       @oxml['alt'].should == 'human'
     end
     
     it 'should produce same xml as created it' do
-      pending
       @oxml.to_s.should == OxMlk::XML::Node.from(@xml).to_s
     end
   end
@@ -60,22 +58,22 @@ describe OxMlk::ClassMethods do
       @klass.new.should respond_to(:name)
     end
   
-    it 'should add a writter method by default' do
+    it 'should add a writter method' do
       @klass.new.should respond_to(:name=)
-    end
-
-    it 'should add not a writter method when :freeze => true' do
-      @klass.new.should_not respond_to(:contacts=)
-    end
-  
-    it 'should add a writter method when :freeze => false' do
-      @klass.new.should respond_to(:friends=)
     end
   end
   
   describe '#ox_attr' do
-    it 'should add an OxMlk::Description to the ox_attrs list' do
-      @klass.ox_attrs.first.should be_a(OxMlk::Description)
+    it 'should add an OxMlk::Attr to the ox_attrs list' do
+      @klass.ox_attrs.first.should be_a(OxMlk::Attr)
+    end
+    
+    it 'should add a reader method' do
+      @klass.new.should respond_to(:alternate)
+    end
+  
+    it 'should add a writter method' do
+      @klass.new.should respond_to(:alternate=)
     end
   end
     

@@ -40,20 +40,6 @@ describe OxMlk::Attr do
     end
   end
   
-  describe '#to_xml' do
-    it 'should return an array' do
-      ox_attr.to_xml.should be_a(Array)
-    end
-    
-    it 'should set first item to @tag' do
-      ox_attr.to_xml.first.should == 'name'
-    end
-    
-    it 'should set last item to value' do
-      ox_attr.to_xml.first.should == 'name'
-    end
-  end
-  
   describe '#tag' do
     it 'should be :from if set' do
       ox_attr(:name, :from => 'FullName').tag.should == 'FullName'

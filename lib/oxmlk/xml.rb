@@ -28,13 +28,6 @@ module OxMlk
           raise 'Invalid XML data'
         end
       end
-      
-      def self.build(name,nodes=[],attributes={})
-        node = new(name)
-        nodes.each {|n| node << n}
-        attributes.each {|x| node[x.first.to_s] = x.last.to_s unless x.last.to_s.blank?}
-        node
-      end
     end
   end
 end

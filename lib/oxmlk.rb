@@ -42,31 +42,25 @@ module OxMlk
       @ox_tag ||= (tag || self).to_s.split('::').last
     end
     
-    def xml_array(data)
-      [ ox_tag, 
-        ox_elems.map {|x| x.to_xml(data)}.flatten,
-        ox_attrs.map {|x| x.to_xml(data)} ]
-    end
-    
     def from_xml(data)
       xml = XML::Node.from(data)
       raise 'invalid XML' unless xml.name == ox_tag
       
       ox = new
-      
-      (ox_attrs + ox_elems).each do |e|
-        value = e.from_xml(xml)
-        if ox.respond_to?(e.setter)
-          ox.send(e.setter,value)
-        else
-          ox.instance_variable_set(e.instance_variable,value)
-        end
-      end
+      (ox_attrs + ox_elems).each {|e| ox.send(e.setter,e.from_xml(xml))}
       ox
     end
     
     def to_xml(data)
-      XML::Node.build(*xml_array(data))
+      ox = XML::Node.new(ox_tag)
+      ox_elems.each do |elem|
+        elem.to_xml(data).each{|e| ox << e}
+      end
+      ox_attrs.each do |a| 
+        val = data.send(a.accessor).to_s
+        ox[a.tag]= val if val.present?
+      end
+      ox
     end
     
   end

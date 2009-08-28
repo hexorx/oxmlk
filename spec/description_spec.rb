@@ -190,72 +190,61 @@ describe OxMlk::Description do
     
     it 'should accept xml argument' do
       @desc = OxMlk::Description.new(:name)
-      @desc.from_xml(@xml, @klass.new).should be_a(String)
+      @desc.from_xml(@xml).should be_a(String)
     end
     
     it 'should return an array if :as is an array' do
       @desc = OxMlk::Description.new(:name, :as => [])
-      @desc.from_xml(@xml, @klass.new).should be_an(Array)
+      @desc.from_xml(@xml).should be_an(Array)
     end
     
     it 'should return a String if :as is :value' do
       @desc = OxMlk::Description.new(:name, :as => :value)
-      @desc.from_xml(@xml, @klass.new).should be_an(String)
+      @desc.from_xml(@xml).should be_an(String)
     end
     
     it 'should return a String if :as is nil' do
       @desc = OxMlk::Description.new(:name)
-      @desc.from_xml(@xml, @klass.new).should be_an(String)
+      @desc.from_xml(@xml).should be_an(String)
     end
     
     it 'should return an Integer if :as is Integer' do
       @desc = OxMlk::Description.new(:name, :as => Integer)
-      @desc.from_xml(@xml, @klass.new).should be_an(Integer)
+      @desc.from_xml(@xml).should be_an(Integer)
     end
     
     it 'should return an Float if :as is Float' do
       @desc = OxMlk::Description.new(:name, :as => Float)
-      @desc.from_xml(@xml, @klass.new).should be_an(Float)
+      @desc.from_xml(@xml).should be_an(Float)
     end
     
     it 'should return an Array of Integers if :as is [Integer]' do
       @desc = OxMlk::Description.new(:name, :as => [Integer])
-      @desc.from_xml(@xml, @klass.new).each do |x|
+      @desc.from_xml(@xml).each do |x|
         x.should be_an(Integer)
       end
     end
     
     it 'should run procs passed to :as' do
       @desc = OxMlk::Description.new(:name, :as => proc {|x| 'hi'})
-      @desc.from_xml(@xml, @klass.new).should == 'hi'
-    end
-    
-    it 'should run method when symbol is passed to :as' do
-      @desc = OxMlk::Description.new(:name, :as => :say_hello)
-      @desc.from_xml(@xml, @klass.new).should == 'hello'
+      @desc.from_xml(@xml).should == 'hi'
     end
     
     it 'should return an OxMlk object if one is passed to :as' do
       @desc = OxMlk::Description.new(:number, :as => Number)
-      @desc.from_xml(@xml, @klass.new).should be_a(Number)
+      @desc.from_xml(@xml).should be_a(Number)
     end
     
     it 'should match class to ox_tag if array of ox_objects is passed to :as' do
       @desc = OxMlk::Description.new(:contact, :as => [Number,Email])
-      @desc.from_xml(@xml, @klass.new).first.should be_a(Number)
+      @desc.from_xml(@xml).first.should be_a(Number)
     end
   end
   
   describe '#to_xml' do
     before(:all) do
       @ox = Person.from_xml(@xml)
-      @attr = Person.ox_attributes.first
       @elem = Person.ox_elems.first
-    end
-    
-    it 'should return an Array of Strings if it is an attribute' do
-      @attr.to_xml(@ox).should be_a(Array)
-      @attr.to_xml(@ox).first.should be_a(String)
     end
     
     it 'should return an Array of nodes if it is an elem' do

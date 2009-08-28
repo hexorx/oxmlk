@@ -90,7 +90,6 @@ module OxMlk
       value = data.send(accessor)
       
       return [] if value.nil?
-      return [accessor.to_s,value.to_s] if attribute?
       
       nodes = [*value].map do |node|
         if node.respond_to?(:to_xml)
@@ -101,7 +100,7 @@ module OxMlk
           XML::Node.new(accessor, node.to_s)
         end
       end
-      @in ? XML::Node.build(@in, nodes) : nodes
+      @in ? [nodes.inject(XML::Node.new(@in)) {|o,n| o << n}] : nodes
     end
     
   protected
