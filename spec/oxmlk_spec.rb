@@ -40,6 +40,12 @@ describe OxMlk::InstanceMethods do
       @oxml.to_s.should == OxMlk::XML::Node.from(@xml).to_s
     end
   end
+  
+  describe '#ox?' do
+    it 'should return true' do
+      Person.ox?.should be_true
+    end
+  end
 end
 
 describe OxMlk::ClassMethods do
@@ -51,7 +57,7 @@ describe OxMlk::ClassMethods do
   
   describe '#ox_elem' do
     it 'should add an OxMlk::Description to the ox_elems list' do
-      @klass.ox_elems.first.should be_a(OxMlk::Description)
+      @klass.ox_elems.first.should be_a(OxMlk::Elem)
     end
   
     it 'should add a reader method' do

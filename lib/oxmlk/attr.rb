@@ -5,8 +5,7 @@ module OxMlk
       Float => :to_f.to_proc,
       String => :to_s.to_proc,
       Symbol => :to_sym.to_proc,
-      :bool => proc {|a| fetch_bool(a)}
-    )
+      :bool => proc {|a| fetch_bool(a)})
     
     attr_reader :accessor, :setter,:from, :as, :procs, :tag
     
@@ -17,7 +16,7 @@ module OxMlk
       @from = o.delete(:from)
       @tag = (from || accessor).to_s
       @as = o.delete(:as) || (:bool if name.ends_with?('?'))
-      @procs = [PROCS[@as],block].compact
+      @procs = ([*as].map {|k| PROCS[k]} + [block]).compact
     end
     
     def from_xml(data)

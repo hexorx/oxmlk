@@ -1,10 +1,11 @@
 dir = File.dirname(__FILE__)
 
+require 'rubygems'
 require 'activesupport'
 
 require File.join(dir, 'oxmlk/xml')
 require File.join(dir, 'oxmlk/attr')
-require File.join(dir, 'oxmlk/description')
+require File.join(dir, 'oxmlk/elem')
 
 module OxMlk
   
@@ -33,13 +34,17 @@ module OxMlk
     end
     
     def ox_elem(name,o={})
-      new_elem =  Description.new(name, o)
+      new_elem =  Elem.new(name, o)
       (@ox_elems ||= []) << new_elem
       attr_accessor new_elem.accessor
     end
     
     def ox_tag(tag=false)
       @ox_tag ||= (tag || self).to_s.split('::').last
+    end
+    
+    def ox?
+      true
     end
     
     def from_xml(data)
