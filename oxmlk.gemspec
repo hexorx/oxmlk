@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{oxmlk}
-  s.version = "0.2.3"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Josh Robinson"]
-  s.date = %q{2009-08-26}
+  s.date = %q{2009-09-01}
   s.description = %q{OxMlk gives you a simple way to map you ruby objects to XML and then convert one to the other.}
   s.email = %q{hexorx@gmail.com}
   s.extra_rdoc_files = [
@@ -28,10 +28,12 @@ Gem::Specification.new do |s|
      "examples/xml/example.xml",
      "examples/xml/posts.xml",
      "lib/oxmlk.rb",
-     "lib/oxmlk/description.rb",
+     "lib/oxmlk/attr.rb",
+     "lib/oxmlk/elem.rb",
      "lib/oxmlk/xml.rb",
      "oxmlk.gemspec",
-     "spec/description_spec.rb",
+     "spec/oxmlk/attr_spec.rb",
+     "spec/oxmlk/elem_spec.rb",
      "spec/oxmlk_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb",
@@ -40,10 +42,11 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/hexorx/oxmlk}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.3}
+  s.rubygems_version = %q{1.3.5}
   s.summary = %q{Object 2 XML kit for ruby}
   s.test_files = [
-    "spec/description_spec.rb",
+    "spec/oxmlk/attr_spec.rb",
+     "spec/oxmlk/elem_spec.rb",
      "spec/oxmlk_spec.rb",
      "spec/spec_helper.rb",
      "spec/xml_spec.rb",
