@@ -3,6 +3,7 @@ dir = File.dirname(__FILE__)
 require 'rubygems'
 require 'activesupport'
 
+require File.join(dir, 'oxmlk/extensions')
 require File.join(dir, 'oxmlk/xml')
 require File.join(dir, 'oxmlk/attr')
 require File.join(dir, 'oxmlk/elem')
@@ -13,6 +14,9 @@ module OxMlk
     base.class_eval do
       include InstanceMethods
       extend ClassMethods
+      
+      @ox_attrs = []
+      @ox_elems = []
     end
   end
   
@@ -27,13 +31,13 @@ module OxMlk
     
     def ox_attr(name,o={})
       new_attr =  Attr.new(name, o)
-      (@ox_attrs ||= []) << new_attr
+      @ox_attrs << new_attr
       attr_accessor new_attr.accessor
     end
     
     def ox_elem(name,o={})
       new_elem =  Elem.new(name, o)
-      (@ox_elems ||= []) << new_elem
+      @ox_elems << new_elem
       attr_accessor new_elem.accessor
     end
     

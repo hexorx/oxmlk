@@ -73,6 +73,14 @@ describe OxMlk::Elem do
     it 'should turn symbol to proc if possible' do
       ox_elem(:name, :as => :to_i).from_xml(@xml).should be_a(Integer)
     end
+    
+    it 'should return true || false if :bool is passed to :as' do
+      ox_elem(:lame, :as => :bool).from_xml(@xml).should be_false
+    end
+    
+    it 'should be bool if name ends with ?' do
+      ox_elem(:lame?).from_xml(@xml).should be_false
+    end
   end
   
   describe '#to_xml' do

@@ -1,5 +1,6 @@
 <person category="meat_popsicle" alt="human">
   <name>Joe</name>
+	<lame>false</lame>
   <number group="main">3035551212</number>
   <number group="cell">3035551234</number>
   <email group="home">test@example.com</email>

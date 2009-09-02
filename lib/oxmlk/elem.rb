@@ -5,22 +5,24 @@ module OxMlk
       Float => :to_f.to_proc,
       String => :to_s.to_proc,
       Symbol => :to_sym.to_proc,
+      Time => proc {|e| Time.parse(e)},
       :raw => proc {|e| e},
       :name => proc {|e| e.name},
       :value => proc {|e| e.value},
-      :bool => proc {|e| fetch_bool(e.value)})
+      :bool => proc {|e| fetch_bool(e)})
     
     attr_reader :accessor, :setter, :collection, :from, :as, :in, :procs, :block, :tag
     
     def initialize(name,o={},&blk)
-      @tag = name.to_s
-      @accessor = @tag.chomp('?').intern
+      @tag = name.to_s.chomp('?')
+      @accessor = @tag.intern
       @setter = "#{@accessor}=".intern
       @collection = o[:as].is_a?(Array)
       
       @from = o[:from]
-      @as = [*o.delete(:as)].compact
-      @in = o.delete(:in)
+      @as = [*o[:as]].compact
+      @as = [:bool] if as.empty? && name.to_s.end_with?('?')
+      @in = o[:in]
       
       @procs = as.map {|k| PROCS[k]}
       @procs = [PROCS[:value]] + procs unless [:raw,:name,:value].include?(as.first) || ox?
@@ -38,7 +40,7 @@ module OxMlk
 
     def from_xml(data)
       xml = XML::Node.from(data)
-      block.call(xml.find(xpath).map do |node|
+      block.call(xml.search(xpath).map do |node|
         procs.inject(node) do |n,p|
           p.call(n)
         end
