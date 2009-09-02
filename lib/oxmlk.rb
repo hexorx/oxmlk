@@ -13,8 +13,6 @@ module OxMlk
     base.class_eval do
       include InstanceMethods
       extend ClassMethods
-      
-      @ox_attrs, @ox_elems = [], []
     end
   end
   
