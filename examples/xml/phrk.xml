@@ -1,0 +1,32 @@
+<Response>
+  <Play loop="2">http://foo.com/cowbell.mp3</Play>
+  <Say voice="man" loop="4" language="en">Josh</Say>
+  <Gather action="/digit.php" method="GET" timeout="10" finishOnKey="4" numDigits="3">
+    <Say>Robinson</Say>
+    <Play>http://foo.com/cowbell.mp3</Play>
+  </Gather>
+  <Record action="http://foo.edu/handleRecording.php" method="GET" maxLength="20" finishOnKey="123*"/>
+  <Say voice="man" loop="4" language="en">Josh</Say>
+  <Redirect>http://www.foo.com/nextInstructions</Redirect>
+  <Pause length="10"/>
+  <Hangup/>
+  <Dial callerid="1234567">
+    <Number sendDigits="ww3">344444</Number>
+  </Dial>
+ 
+  
+  <Rule name="open" mode="all">
+    <Conditions>  
+      <Schedule mode="all" tz_offset="-7" time="08:00-17:00" year="2009-2020" month="jan-dec" day_of_week="mon-fri" day_of_month="10-20"/>
+      <Tags mode="all" include="monkey" exclude="tacobell"/>
+    </Conditions>
+    
+    <Match>
+      <Tag>open</Tag>
+    </Match>
+    
+    <NoMatch>
+      <Tag>closed</Tag>
+    </NoMatch>
+  </Rule>
+</Response>

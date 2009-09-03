@@ -25,6 +25,7 @@ class Person
   ox_attr :alternate, :from => 'alt'
   
   ox_elem :name
+  ox_elem :lame?
   ox_elem :contacts, :as => [Number,Email]
   ox_elem :friends, :as => [Person], :in => :friends
   
