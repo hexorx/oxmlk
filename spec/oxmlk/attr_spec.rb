@@ -48,6 +48,10 @@ describe OxMlk::Attr do
     it 'should default to name cleaned up' do
       ox_attr(:name).tag.should == 'name'
     end
+    
+    it 'should apply :tag_proc if set' do
+      ox_attr(:name, :tag_proc => :upcase.to_proc).tag.should == 'NAME'
+    end
   end
 end
 

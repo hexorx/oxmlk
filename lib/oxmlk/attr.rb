@@ -7,15 +7,16 @@ module OxMlk
       Symbol => :to_sym.to_proc,
       :bool => proc {|a| fetch_bool(a)})
     
-    attr_reader :accessor, :setter,:from, :as, :procs, :tag
+    attr_reader :accessor, :setter,:from, :as, :procs, :tag_proc, :tag
     
     def initialize(name,o={},&block)
       name = name.to_s
       @accessor = name.chomp('?').intern
       @setter = "#{@accessor}=".intern
-      @from = o.delete(:from)
-      @tag = (from || accessor).to_s
-      @as = o.delete(:as) || (:bool if name.ends_with?('?'))
+      @from = o[:from]
+      @tag_proc = o[:tag_proc].to_proc rescue proc {|x| x}
+      @tag = (from || (@tag_proc.call(accessor.to_s) rescue accessor)).to_s
+      @as = o[:as] || (:bool if name.ends_with?('?'))
       @procs = ([*as].map {|k| PROCS[k]} + [block]).compact
     end
     

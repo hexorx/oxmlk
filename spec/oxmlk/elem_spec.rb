@@ -124,6 +124,10 @@ describe OxMlk::Elem do
     it 'should add :in + / to all items in array of ox objects' do
       ox_elem(:name, :as => [OxKlass,OxKlass], :in => :friends).xpath.should == 'friends/name|friends/name'
     end
+    
+    it 'should be :tag_proc.call(name) if :tag_proc is set' do
+      ox_elem(:name, :tag_proc => :upcase).xpath.should == 'NAME'
+    end
   end
 end
 

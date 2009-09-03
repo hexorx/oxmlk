@@ -24,7 +24,7 @@ describe OxMlk::InstanceMethods do
     end
     
     it 'should set elements' do
-      @oxml.children.map(&:name).should == ['name','number','number','email','friends']
+      @oxml.children.map(&:name).should == ['name','lame','number','number','email','friends']
     end
     
     it 'should set content to text node' do
@@ -84,7 +84,6 @@ describe OxMlk::ClassMethods do
   end
     
   describe '#from_xml' do
-    
     it 'should return an instance of class' do
       @klass.from_xml('<person/>').should be_a(@klass)
     end
@@ -125,7 +124,7 @@ describe OxMlk::ClassMethods do
   
   describe '#ox_elems' do
     it 'should return a list of elements' do
-      @klass.ox_elems.size.should == 3
+      @klass.ox_elems.size.should == 4
     end
   end
   
@@ -136,6 +135,33 @@ describe OxMlk::ClassMethods do
     
     it 'should default to class name with module removed' do
       Test::Example.ox_tag.should == 'Example'
+    end
+    
+    describe 'procs and blocs' do
+      before(:each) do
+        @klass = Class.new do
+          include OxMlk
+
+          def self.to_s
+            'ExampleTest'
+          end
+        end
+      end
+      
+      it 'should apply proc if set' do
+        @klass.ox_tag(proc {|x| x.upcase}).should == 'EXAMPLETEST'
+      end
+      
+      it 'should apply :sym.to_proc if set' do
+        @klass.ox_tag(:downcase).should == 'exampletest'
+      end
+      
+      it 'should apply block if passed' do
+        @klass.ox_tag do |x|
+          x.underscore
+        end
+        @klass.ox_tag.should == 'example_test'
+      end
     end
   end
 end

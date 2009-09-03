@@ -11,11 +11,13 @@ module OxMlk
       :value => proc {|e| e.value},
       :bool => proc {|e| fetch_bool(e)})
     
-    attr_reader :accessor, :setter, :collection, :from, :as, :in, :procs, :block, :tag
+    attr_reader :accessor, :setter, :collection, :from, :as, :in, :procs, :block, :tag_proc, :tag
     
     def initialize(name,o={},&blk)
-      @tag = name.to_s.chomp('?')
-      @accessor = @tag.intern
+      @tag_proc = o[:tag_proc].to_proc rescue proc {|x| x}
+      @base_tag = name.to_s.chomp('?')
+      @tag = @tag_proc.call(@base_tag) rescue @base_tag
+      @accessor = @base_tag.intern
       @setter = "#{@accessor}=".intern
       @collection = o[:as].is_a?(Array)
       
