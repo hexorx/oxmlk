@@ -3,7 +3,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec/spec_helper')
 
 class Post
   include OxMlk
-  
   ox_tag :post
   
   ox_attr :href
@@ -17,7 +16,6 @@ end
 
 class Response
   include OxMlk
-  
   ox_tag :posts
   
   ox_attr :user

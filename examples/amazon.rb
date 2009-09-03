@@ -10,17 +10,17 @@ class Item
   ox_elem :point, :from => 'georss:point'
 end
 
-class Response
+class ItemSearchResponse
   include OxMlk
   
-  ox_tag 'ItemSearchResponse'
+  ox_tag :camelcase
   
-  ox_elem :total_results, :from => 'TotalResults', :as => Integer, :in => 'Items'
-  ox_elem :total_pages, :from => 'TotalPages', :as => Integer, :in => 'Items'
+  ox_elem :total_results, :as => Integer, :in => 'Items'
+  ox_elem :total_pages, :as => Integer, :in => 'Items'
   ox_elem :items, :as => [Item], :in => 'Items'
 end
 
-response = Response.from_xml(xml_for(:amazon))
+response = ItemSearchResponse.from_xml(xml_for(:amazon))
 
 puts response.total_results, response.total_pages
 

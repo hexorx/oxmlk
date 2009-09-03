@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec/spec_helper')
 class User
   include OxMlk
   
-  ox_tag :user
+  ox_tag :downcase
   
   ox_elem :id, :as => Integer
   ox_elem :name
@@ -20,7 +20,7 @@ end
 class Status
   include OxMlk
   
-  ox_tag :status
+  ox_tag :downcase
      
   ox_elem :id, :as => Integer
   ox_elem :text
@@ -36,7 +36,7 @@ end
 class Response
   include OxMlk
   
-  ox_tag 'statuses'
+  ox_tag :statuses
   
   ox_elem :statuses, :as => [Status]
 end

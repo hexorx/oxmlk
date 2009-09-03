@@ -5,11 +5,10 @@
     <Say>Robinson</Say>
     <Play>http://foo.com/cowbell.mp3</Play>
   </Gather>
-  <Record action="http://foo.edu/handleRecording.php" method="GET" maxLength="20" finishOnKey="123*"/>
-  <Say voice="man" loop="4" language="en">Josh</Say>
+  <Record action="http://foo.edu/handleRecording" method="GET" maxLength="20" finishOnKey="123*"/>
+  <Say voice="man" loop="4" language="en">AHHHHHH</Say>
   <Redirect>http://www.foo.com/nextInstructions</Redirect>
   <Pause length="10"/>
-  <Hangup/>
   <Dial callerid="1234567">
     <Number sendDigits="ww3">344444</Number>
   </Dial>
@@ -29,4 +28,5 @@
       <Tag>closed</Tag>
     </NoMatch>
   </Rule>
+  <Hangup/>
 </Response>
