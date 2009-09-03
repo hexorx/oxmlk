@@ -35,7 +35,7 @@ class Gather
   ox_elem :verbs, :as => [Say,Play]
   
   def description
-    "Gather #{num_digits} keypresses ending on key 'finish_on_key}' or timing out at #{timeout} seconds, then send #{method} to #{action}:\n\t#{verbs.map(&:description).join("\n\t")}"
+    "Gather #{num_digits} keypresses ending on key '#{finish_on_key}' or timing out at #{timeout} seconds, then send #{method} to #{action}:\n\t#{verbs.map(&:description).join("\n\t")}"
   end
 end
 
