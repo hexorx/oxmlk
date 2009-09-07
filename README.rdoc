@@ -1,6 +1,10 @@
-= oxmlk
+= OxMlk
 
-OxMlk is a simple lightweight XML mapper. Its structure is inspired by happymapper and its syntax takes after ROXML. Right now there is one example to get things going. More features, examples and documentation will be coming soon.
+OxMlk is a simple lightweight XML mapper. Its structure is inspired by happymapper and its syntax takes after ROXML. Right now there is one example to get things going.
+
+== Documentation
+
+Hosted at {http://rdoc.info/projects/hexorx/oxmlk rdoc.info}
 
 == Note on Patches/Pull Requests
  
@@ -10,7 +14,7 @@ OxMlk is a simple lightweight XML mapper. Its structure is inspired by happymapp
   future version unintentionally.
 * Commit, do not mess with rakefile, version, or history.
   (if you want to have your own version, that is fine but
-   bump version in a commit by itself I can ignore when I pull)
+  bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
 == Copyright
