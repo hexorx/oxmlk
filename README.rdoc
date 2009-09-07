@@ -1,10 +1,108 @@
-= OxMlk
+=OxMlk (Object XML Kit or something like that)
 
-OxMlk is a simple lightweight XML mapper. Its structure is inspired by happymapper and its syntax takes after ROXML. Right now there is one example to get things going.
+OxMlk is a flexible, lightweight, Object to XML mapper. It gives you a dsl for describing the relationship between your object and an XML structure. Once defined you can use the from_xml to create objects from an XML file and the to_xml file to export you objects as XML. Full documentation is hosted at {http://rdoc.info/projects/hexorx/oxmlk rdoc.info}.
 
-== Documentation
+==Why?
 
-Hosted at {http://rdoc.info/projects/hexorx/oxmlk rdoc.info}
+Aren't there already XML mappers out there? Yes! Some really good ones. {http://github.com/Empact/roxml ROXML} has a great syntax and wonderful documentation. But .... it wasn't able to do something that I really needed it to do. You see OxMlk is an extraction from a parser for PhrkML. PhrkML is used to control call flow on VoIP systems. It has a list of action tags that tell the call what to do. They have to happen in order and each one is its own object. I found some hacks I could do to make ROXML kinda do what I wanted but it was pretty ugly. So I looked for something else and found {http://github.com/jnunemaker/happymapper HappyMapper}. It had an impressively simple design but it also didn't do what I need. So I made OxMlk. It tries to combine the syntax of {http://github.com/Empact/roxml ROXML} and the simple design of {http://github.com/jnunemaker/happymapper HappyMapper} while adding some features to make it extra flexible.
+
+==Acknowledgements
+
+The syntax and even the documentation borrow heavily from {http://github.com/Empact/roxml ROXML} and the design is inspired by {http://github.com/jnunemaker/happymapper HappyMapper}.
+
+=Quick Start Guide
+
+This is a short tutorial based on the ROXML Quick Start Guide. The full rdoc is hosted at {http://rdoc.info/projects/hexorx/oxmlk rdoc.info} and has more detail in OxMlk::Attr and OxMlk::Elem.
+
+==Basic Mapping
+
+Consider an XML document representing a Library containing a number of Books. You can map this structure to Ruby classes that provide addition useful behavior. With OxMlk, you can annotate the Ruby classes as follows:
+
+  class Book
+    include OxMlk
+
+    ox_attr :isbn, :from => 'ISBN' # attribute with name 'ISBN'
+    ox_elem :title
+    ox_elem :description
+    ox_elem :author
+  end
+
+  class Library
+    include OxMlk
+
+    ox_elem :name, :from => 'NAME'
+    ox_elem :books, :as => [Book] # by default oxmlk will use Book.tag to determine what to search for.
+  end
+
+To create a library and put a number of books in it we could run the following code:
+
+  book = Book.new
+  book.isbn = "0201710897"
+  book.title = "The PickAxe"
+  book.description = "Best Ruby book out there!"
+  book.author = "David Thomas, Andrew Hunt, Dave Thomas"
+
+  lib = Library.new
+  lib.name = "Favorite Books"
+  lib.books = [book]
+
+To save this information to an XML file:
+
+  doc = ROXML::XML::Document.new
+  doc.root = lib.to_xml
+  doc.save("library.xml")
+
+To later populate the library object from the XML file:
+
+  lib = Library.from_xml(File.read("library.xml"))
+
+Similarly, to do a one-to-one mapping between XML objects, such as book and publisher,
+you would add a reference to another ROXML class. For example:
+
+  <book isbn="0974514055">
+    <title>Programming Ruby - 2nd Edition</title>
+    <description>Second edition of the great book.</description>
+    <publisher>
+      <name>Pragmatic Bookshelf</name>
+    </publisher>
+  </book>
+
+can be mapped using the following code:
+
+  class Publisher
+    include OxMlk
+    
+    ox_tag :downcase
+    xml_elem :name
+
+    # other important functionality
+  end
+
+  class BookWithPublisher
+    include OxMlk
+
+    ox_tag 'book'
+    ox_elem :publisher, :as => Publisher
+
+    #  or, alternatively, if no class is needed to hang functionality on:
+    # ox_elem :publisher, :from => 'name', :in => 'publisher'
+  end
+
+Note: In the above example, _ox_tag_ annotation tells OxMlk to set the element name for the BookWithPublisher class to 'book' for mapping to XML. The default XML element name is the class name, so 'BookWithPublisher' in this case. In the Publisher class it is set to the symbol :downcase, this tells OxMlk to take the class name and attempt to convert it to all lower case. That means OxMlk will look for <publisher> instead of <Publisher> This behavior will be inherited by the attrs and elems in the class as well. So (ox_elem :Name) would look for a <name> instead of <Name>.
+
+== Manipulation
+
+Extending the above examples, say you want to parse a book's page count and have it available as an Integer. In such a case, you can extend any object with a block to manipulate it's value at parse time. For example:
+
+  class Dog
+    include OxMlk
+
+    ox_attr(:age, :from => :human_years, :as => Integer) {|years| years * 7 }
+  end
+
+The result of the block above is stored, rather than the actual value parsed from the document. It is important to keep in mind that manipulating data in this manner is one way. So when to_xml is ran you will get an age attribute not a human_years attribute.
+
+= Extra Stuff
 
 == Note on Patches/Pull Requests
  
