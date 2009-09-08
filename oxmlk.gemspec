@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{oxmlk}
-  s.version = "0.3.2"
+  s.version = "0.3.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Josh Robinson"]
-  s.date = %q{2009-09-03}
+  s.date = %q{2009-09-08}
   s.description = %q{OxMlk gives you a simple way to map you ruby objects to XML and then convert one to the other.}
   s.email = %q{hexorx@gmail.com}
   s.extra_rdoc_files = [
@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
      "VERSION",
      "examples/amazon.rb",
      "examples/example.rb",
+     "examples/phrk.rb",
      "examples/posts.rb",
      "examples/twitter.rb",
      "examples/xml/amazon.xml",
@@ -57,6 +58,7 @@ Gem::Specification.new do |s|
      "spec/xml_spec.rb",
      "examples/amazon.rb",
      "examples/example.rb",
+     "examples/phrk.rb",
      "examples/posts.rb",
      "examples/twitter.rb"
   ]
