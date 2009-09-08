@@ -38,6 +38,89 @@ private
     attr_accessor :ox_attrs, :ox_elems, :tag_proc
     
     # Declares a reference to a certain xml attribute.
+    #
+    # == Sym Option
+    # [sym] Symbol representing the name of the accessor
+    #
+    # === Default naming
+    # This is what it will use to lookup the attribute if a name isn't defined in :from. For example:
+    #
+    #  ox_attr :bob
+    #  ox_attr :pony
+    #
+    # are equivalent to:
+    #
+    #  ox_attr :bob, :from => 'bob'
+    #  ox_attr :pony, :from => 'pony'
+    #
+    # === Boolean attributes
+    # If the name ends in a ?, OxMlk will attempt to coerce the value to true or false,
+    # with true, yes, t and 1 mapping to true and false, no, f and 0 mapping
+    # to false, as shown below:
+    #
+    #  ox_elem :desirable?
+    #  ox_attr :bizzare?, :from => 'BIZZARE'
+    #
+    #  x = #from_xml(%{
+    #    <object BIZZARE="1">
+    #      <desirable>False</desirable>
+    #    </object>
+    #  })
+    #
+    #  x.desirable?
+    #  => false
+    #  x.bizzare?
+    #  => true
+    #
+    # When a block is provided the value will be passed to the block 
+    # where unexpected values can be handled. If no block is provided
+    # the unexpected value will be returned.
+    #
+    #  #from_xml(%{
+    #    <object BIZZARE="Dunno"\>
+    #  }).desirable?
+    #  => "Dunno"
+    #
+    #  ox_attr :bizzare? do |val|
+    #    val.upcase
+    #  end
+    #
+    #  #from_xml(%{
+    #    <object BIZZARE="Dunno"\>
+    #  }).strange?
+    #  => "DUNNO"
+    #
+    # == Blocks
+    # You may also pass a block which manipulates the associated parsed value.
+    #
+    #  class Muffins
+    #    include OxMlk
+    #
+    #    ox_attr(:count, :from => 'bakers_dozens') {|val| val.to_i * 13 }
+    #  end
+    #
+    # Blocks are always passed the value after being manipulated by the :as option 
+    # and are the last thing to manipulate the XML. This is different than the 
+    # ox_elem annotation that is passed an Array.
+    #
+    # == Options
+    # === :as
+    # ==== Basic Types
+    # Allows you to specify one of several basic types to return the value as. For example
+    #
+    #  ox_elem :count, :as => Integer
+    #
+    # is equivalent to:
+    #
+    #  ox_elem(:count) {|val| Integer(val) unless val.empty?}
+    #
+    # Such block shorthands for Integer, Float, String, Symbol and Time
+    # are currently available.
+    #
+    # If an Array is passed each Type in the array will be applied to the value in order.
+    #
+    # === :from
+    # The name by which the xml value will be found in XML. Default is sym.
     def ox_attr(name,o={},&block)
       new_attr =  Attr.new(name, o.reverse_merge(:tag_proc => @tag_proc),&block)
       @ox_attrs << new_attr
@@ -61,7 +144,7 @@ private
     #  ox_elem :pony, :from => 'pony'
     #
     # === Boolean attributes
-    # If the name ends in a ?, ROXML will attempt to coerce the value to true or false,
+    # If the name ends in a ?, OxMlk will attempt to coerce the value to true or false,
     # with true, yes, t and 1 mapping to true and false, no, f and 0 mapping
     # to false, as shown below:
     #
@@ -110,12 +193,11 @@ private
     #    ox_elem(:count, :from => 'bakers_dozens') {|val| val.first.to_i * 13 }
     #  end
     #
-    # Blocks are always passed an Array and ar the last thing to manipulate the XML.
+    # Blocks are always passed an Array and are the last thing to manipulate the XML.
     # The array will include all elements already manipulated by anything passed to
-    # the :as option. If the :as option is an Array and no block is passed then the
-    # block defaults to proc {|x| x} returning the Array. If the :as option is nil or
-    # is not an Array then the block is set to proc {|x| x.first} returning the first
-    # element only.
+    # the :as option. If the :as option is an Array and no block is passed then the 
+    # Array is returned unmodified. If the :as option is nil or is not an Array then 
+    # only the first element is returned.
     #
     # == Options
     # === :as
