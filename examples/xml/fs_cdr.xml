@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<cdr>
+  <variables>
+    
+    <!-- extra xml tags 'n such i don't need -->
+    
+    <hangup_cause>NORMAL_CLEARING</hangup_cause>
+    <start_stamp>2008-07-31 2011</start_stamp>
+    <answer_stamp>2008-07-31 2011</answer_stamp>
+    <end_stamp>2008-07-31 2011</end_stamp>
+    
+    <caller_id>Mikey</caller_id>
+    <duration>39</duration>
+    <billsec>36</billsec>
+    
+    <!-- extra xml tags 'n such i don't need -->
+    
+  </variables>
+</cdr>
+
+<!-- 
+     these are the exact tag names and such i will recieve from Mod_xml_cdr,
+     there's ALOT more, but these are the only ones i need. 
+     From the xml_cdr wiki: 'Date/time stamp variables are URI encoded
+     so be sure to "URI decode" them prior to inserting them into a database.' 
+-->

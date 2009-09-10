@@ -24,7 +24,7 @@ module OxMlk
       @from = o[:from]
       @as = [*o[:as]].compact
       @as = [:bool] if as.empty? && name.to_s.end_with?('?')
-      @in = o[:in]
+      @in = o[:in].to_s
       
       @procs = as.map {|k| PROCS[k]}
       @procs = [PROCS[:value]] + procs unless [:raw,:name,:value].include?(as.first) || ox?
@@ -63,8 +63,7 @@ module OxMlk
           XML::Node.new(tag, node.to_s)
         end
       end
-      return [] if nodes.empty?
-      @in ? [nodes.inject(XML::Node.new(@in)) {|o,n| o << n}] : nodes
+      nodes.empty? ? [] : nodes
     end
     
     def xpath

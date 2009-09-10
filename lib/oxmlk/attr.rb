@@ -1,7 +1,7 @@
 module OxMlk
   class Attr
     
-    attr_reader :accessor, :setter,:from, :as, :procs, :tag_proc, :tag
+    attr_reader :accessor, :setter, :from, :as, :procs, :tag_proc, :tag
     
     # Named Procs for use in :as option.
     PROCS = (Hash.new {|h,k| k.to_proc rescue nil}).merge(
@@ -44,12 +44,12 @@ module OxMlk
       @procs = ([*as].map {|k| PROCS[k]} + [block]).compact
     end
     
-  private
-    
     # Finds @tag in data and applies procs.
     def from_xml(data)
       procs.inject(XML::Node.from(data)[tag]) {|d,p| p.call(d) rescue d}
     end
+    
+  private
     
     # Converts a value to a Boolean.
     # @param [Symbol,String,Integer] value Value to convert

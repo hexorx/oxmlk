@@ -25,7 +25,6 @@ private
   end
   
   module InstanceMethods
-    
     # Returns a LibXML::XML::Node representing this object
     def to_xml
       self.class.to_xml(self)
@@ -124,7 +123,7 @@ private
     def ox_attr(name,o={},&block)
       new_attr =  Attr.new(name, o.reverse_merge(:tag_proc => @tag_proc),&block)
       @ox_attrs << new_attr
-      attr_accessor new_attr.accessor
+      ox_accessor new_attr.accessor
     end
     
     # Declares a reference to a certain xml element or a typed collection of elements.
@@ -197,7 +196,7 @@ private
     # The array will include all elements already manipulated by anything passed to
     # the :as option. If the :as option is an Array and no block is passed then the 
     # Array is returned unmodified. If the :as option is nil or is not an Array then 
-    # only the first element is returned.
+    # only the first element is 
     #
     # == Options
     # === :as
@@ -336,7 +335,7 @@ private
     def ox_elem(name,o={},&block)
       new_elem =  Elem.new(name, o.reverse_merge(:tag_proc => @tag_proc),&block)
       @ox_elems << new_elem
-      attr_accessor new_elem.accessor
+      ox_accessor new_elem.accessor
     end
     
     # Sets the name of the XML element that represents this class. Use this
@@ -407,9 +406,21 @@ private
       xml = XML::Node.from(data)
       raise 'invalid XML' unless xml.name == ox_tag
       
-      ox = new
-      (ox_attrs + ox_elems).each {|e| ox.send(e.setter,e.from_xml(xml))}
-      ox
+      returning new do |ox|
+        (ox_attrs + ox_elems).each {|e| ox.send(e.setter,e.from_xml(xml))}
+        ox.send(:after_parse) if ox.respond_to?(:after_parse)
+      end
+    end
+    
+    def ox_accessor(sym)
+      define_method(sym) do
+        @attributes ||= {}
+        @attributes[sym.to_s]
+      end
+      define_method("#{sym}=") do |val|
+        @attributes ||= {}
+        @attributes[sym.to_s] = val
+      end
     end
     
     # Returns XML generated from an instance based on Attr & Elem definitions.
@@ -417,13 +428,24 @@ private
     # @return [XML::Node] Generated XML::Node  
     def to_xml(data)
       ox = XML::Node.new(ox_tag)
+      wrappers = {}
+      
       ox_elems.each do |elem|
-        elem.to_xml(data).each{|e| ox << e}
+        if elem.in
+          wrappers[elem.in] ||= XML::Node.new elem.in
+          elem.to_xml(data).each {|e| wrappers[elem.in] << e}
+        else
+          elem.to_xml(data).each {|e| ox << e}
+        end
       end
+      
+      wrappers.each {|k,v| ox << v}
+      
       ox_attrs.each do |a| 
         val = data.send(a.accessor).to_s
         ox[a.tag]= val if val.present?
       end
+      
       ox
     end
   end
